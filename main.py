@@ -21,13 +21,21 @@ vyska_skoku = -15
 gravitace = 0.8
 rychlost_nahoru = 0
 skok = True
+#dash
 dash = True
+dashuje = False
+rychlost_dashe = 0
 smer = 1
-dalka_dashe = 60
+max_rychlost_dashe = 30
+zpomaleni_dashe = 1
+
+
 #u směru 1=doprava 0=doleva
 
 #herní loop
 fps_casovac = pygame.time.Clock()
+
+hodiny = pygame.time.Clock()
 
 while True:
     
@@ -71,19 +79,29 @@ while True:
     rychlost_nahoru += gravitace
     hrac_y += rychlost_nahoru
     
-    if tlacitka[pygame.K_LSHIFT] and dash:
-        if smer == 1:
-            hrac_x += dalka_dashe
-        else: 
-            hrac_x -= dalka_dashe
+    #Dash
+
+    if tlacitka[pygame.K_LSHIFT] and dash and not dashuje:
+        dashuje = True
         dash = False
-    
+        rychlost_dashe = max_rychlost_dashe
+    if dashuje:
+        if smer == 1:
+            hrac_x += rychlost_dashe
+        else:
+            hrac_x -= rychlost_dashe
+        
+        if rychlost_dashe > 0:
+            rychlost_dashe -= zpomaleni_dashe
+        if rychlost_dashe <= 0:
+            rychlost_dashe = 0
+            dashuje = False
 
     if hrac_y > 700:
         hrac_y = 700
         rychlost_nahoru = 0
         skok = True
-        dash = True
+
     pygame.display.update()
     
     fps_casovac.tick(60)   
