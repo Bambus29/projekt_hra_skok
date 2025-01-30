@@ -12,8 +12,10 @@ okno_aplikace = pygame.display.set_mode((Rozliseni_okna_x, Rozliseni_okna_y))
 
 #hráč
 
-hrac_x = 100
-hrac_y = 400
+spawn_x = 100
+spawn_y = 400
+hrac_x = spawn_x
+hrac_y = spawn_y
 velikost_hrace_x = 50
 velikost_hrace_y = 50
 barva_hrace = (220, 50, 23,)
@@ -21,6 +23,11 @@ vyska_skoku = -15
 gravitace = 0.8
 rychlost_nahoru = 0
 skok = True
+pokusy = 0
+pokusy_celk = 0
+na_zemi = False
+
+
 #dash
 dash = True
 dashuje = False
@@ -29,8 +36,14 @@ smer = 1
 max_rychlost_dashe = 30
 zpomaleni_dashe = 1
 
-
 #u směru 1=doprava 0=doleva
+
+#překážky
+prekazky_lvl_1 = [
+    pygame.Rect(0, 450, 350, 300),      
+    pygame.Rect(575, 0, 150, 500),      
+    pygame.Rect(900, 300, 600, 650)     
+]
 
 #herní loop
 fps_casovac = pygame.time.Clock()
@@ -45,8 +58,9 @@ while True:
         if udalost.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-    
-
+    hrac_rect = pygame.Rect(hrac_x, hrac_y, velikost_hrace_x, velikost_hrace_y)
+    na_zemi = False
+    gravitace = 0.8
     #   LEVEL 1 
     #překážky
     pygame.draw.rect(okno_aplikace, (40, 133, 16),(0, 450, 350, 300))
@@ -60,6 +74,28 @@ while True:
 
     #hráč
     pygame.draw.rect(okno_aplikace, barva_hrace, (hrac_x, hrac_y, velikost_hrace_x, velikost_hrace_y))
+
+    #kolize
+   
+    #s překážkami
+    for prekazaka in prekazky_lvl_1:
+     if hrac_rect.colliderect(prekazaka): 
+        if hrac_rect.bottom > prekazaka.top:
+            hrac_y = prekazaka.top - velikost_hrace_y 
+            rychlost_nahoru = 0
+            na_zemi = True
+       
+    #s rohy obrazu
+    if hrac_y > Rozliseni_okna_y:
+        hrac_y = spawn_y
+        hrac_x = spawn_x
+        pokusy += 1
+    if hrac_x < 0:
+        hrac_x = 0
+    if hrac_x + velikost_hrace_x > Rozliseni_okna_x:
+        hrac_x = Rozliseni_okna_x - velikost_hrace_x
+    if hrac_y < 0:
+        hrac_y = 0
 
     #ovládání
     tlacitka = pygame.key.get_pressed()
@@ -101,7 +137,10 @@ while True:
         hrac_y = 700
         rychlost_nahoru = 0
         skok = True
-
+    if na_zemi:
+        gravitace = 0
+        skok = True
+    
     pygame.display.update()
     
     fps_casovac.tick(60)   
