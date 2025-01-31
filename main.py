@@ -58,9 +58,11 @@ while True:
         if udalost.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+   
     hrac_rect = pygame.Rect(hrac_x, hrac_y, velikost_hrace_x, velikost_hrace_y)
     na_zemi = False
     gravitace = 0.8
+   
     #   LEVEL 1 
     #překážky
     pygame.draw.rect(okno_aplikace, (40, 133, 16),(0, 450, 350, 300))
@@ -80,12 +82,17 @@ while True:
     #s překážkami
     for prekazaka in prekazky_lvl_1:
      if hrac_rect.colliderect(prekazaka): 
-        if hrac_rect.bottom > prekazaka.top:
+        prekryv_x = min(hrac_rect.right, prekazaka.right) - max(hrac_rect.left, prekazaka.left)
+        if hrac_rect.bottom > prekazaka.top and rychlost_nahoru > 0 and prekryv_x > velikost_hrace_x/2:
             hrac_y = prekazaka.top - velikost_hrace_y 
             rychlost_nahoru = 0
             na_zemi = True
-       
-    #s rohy obrazu
+        elif not na_zemi:
+            if hrac_rect.right > prekazaka.left and hrac_rect.left < prekazaka.left:
+             hrac_x = prekazaka.left - velikost_hrace_x 
+            if hrac_rect.left < prekazaka.right and hrac_rect.right > prekazaka.right:
+             hrac_x = prekazaka.right 
+    #s rohy obrazud
     if hrac_y > Rozliseni_okna_y:
         hrac_y = spawn_y
         hrac_x = spawn_x
