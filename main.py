@@ -26,7 +26,8 @@ skok = True
 pokusy = 0
 pokusy_celk = 0
 na_zemi = False
-
+wall_grab = False
+wall_grab_grab_padani = 0.5
 
 #dash
 dash = True
@@ -62,7 +63,7 @@ while True:
     hrac_rect = pygame.Rect(hrac_x, hrac_y, velikost_hrace_x, velikost_hrace_y)
     na_zemi = False
     gravitace = 0.8
-   
+    wall_grab = False
     #   LEVEL 1 
     #překážky
     pygame.draw.rect(okno_aplikace, (40, 133, 16),(0, 450, 350, 300))
@@ -90,8 +91,16 @@ while True:
         elif not na_zemi:
             if hrac_rect.right > prekazaka.left and hrac_rect.left < prekazaka.left:
              hrac_x = prekazaka.left - velikost_hrace_x 
+            if tlacitka[pygame.K_LCTRL]: 
+                wall_grab = True
+                hrac_x = prekazaka.right 
+                skok = True 
             if hrac_rect.left < prekazaka.right and hrac_rect.right > prekazaka.right:
-             hrac_x = prekazaka.right 
+             hrac_x = prekazaka.right
+            if tlacitka[pygame.K_LCTRL]:  
+                wall_grab = True
+                hrac_x = prekazaka.left - velikost_hrace_x
+                skok = True
     #s rohy obrazud
     if hrac_y > Rozliseni_okna_y:
         hrac_y = spawn_y
@@ -144,9 +153,12 @@ while True:
         hrac_y = 700
         rychlost_nahoru = 0
         skok = True
-    if na_zemi:
-        gravitace = 0
-        skok = True
+    if not na_zemi:
+     if wall_grab:
+        rychlost_nahoru = wall_grab_grab_padani 
+    else:
+        rychlost_nahoru += gravitace
+    hrac_y += rychlost_nahoru
     
     pygame.display.update()
     
