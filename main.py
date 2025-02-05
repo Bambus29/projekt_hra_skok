@@ -43,7 +43,7 @@ zpomaleni_dashe = 1
 prekazky_lvl_1 = [
     pygame.Rect(0, 450, 350, 300),      
     pygame.Rect(575, 0, 150, 500),      
-    pygame.Rect(900, 300, 600, 650)     
+    pygame.Rect(900, 300, 600, 650),     
 ]
 
 #herní loop
@@ -69,7 +69,7 @@ while True:
     pygame.draw.rect(okno_aplikace, (40, 133, 16),(0, 450, 350, 300))
     pygame.draw.rect(okno_aplikace, (40, 133, 16),(575, 0, 150, 500))
     pygame.draw.rect(okno_aplikace, (40, 133, 16),(900, 300, 600, 650))
-
+    
     #cíl
     pygame.draw.rect(okno_aplikace, (0, 0, 0,),(1150, 200, 10, 100))
     pygame.draw.polygon(okno_aplikace, (255, 175, 60),[(1161, 200),(1161, 250),(1211, 225)])
@@ -88,24 +88,32 @@ while True:
             hrac_y = prekazaka.top - velikost_hrace_y 
             rychlost_nahoru = 0
             na_zemi = True
+            skok = True
+        elif hrac_rect.top < prekazaka.bottom and rychlost_nahoru < 0:
+            hrac_y = prekazaka.bottom
+            rychlost_nahoru = 0
         elif not na_zemi:
+           #pravá
             if hrac_rect.right > prekazaka.left and hrac_rect.left < prekazaka.left:
              hrac_x = prekazaka.left - velikost_hrace_x 
-            if tlacitka[pygame.K_LCTRL]: 
-                wall_grab = True
-                hrac_x = prekazaka.right 
-                skok = True 
-            if hrac_rect.left < prekazaka.right and hrac_rect.right > prekazaka.right:
-             hrac_x = prekazaka.right
-            if tlacitka[pygame.K_LCTRL]:  
+            if tlacitka[pygame.K_LCTRL] and smer == 1: 
                 wall_grab = True
                 hrac_x = prekazaka.left - velikost_hrace_x
+                skok = True 
+           #levá
+            if hrac_rect.left < prekazaka.right and hrac_rect.right > prekazaka.right:
+             hrac_x = prekazaka.right
+            if tlacitka[pygame.K_LCTRL] and smer == 0:  
+                wall_grab = True
                 skok = True
+                hrac_x = prekazaka.right
+                
     #s rohy obrazud
     if hrac_y > Rozliseni_okna_y:
         hrac_y = spawn_y
         hrac_x = spawn_x
         pokusy += 1
+        dash = True
     if hrac_x < 0:
         hrac_x = 0
     if hrac_x + velikost_hrace_x > Rozliseni_okna_x:
@@ -149,10 +157,6 @@ while True:
             rychlost_dashe = 0
             dashuje = False
 
-    if hrac_y > 700:
-        hrac_y = 700
-        rychlost_nahoru = 0
-        skok = True
     if not na_zemi:
      if wall_grab:
         rychlost_nahoru = wall_grab_grab_padani 
