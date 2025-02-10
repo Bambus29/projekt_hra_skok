@@ -100,6 +100,10 @@ while True:
             if tlacitka[pygame.K_LCTRL] and smer == 1: 
                 wall_grab = True
                 hrac_x = prekazaka.left - velikost_hrace_x
+                skok = True
+            if tlacitka[pygame.K_LCTRL] and smer == 0: 
+                wall_grab = True
+                hrac_x = prekazaka.right 
                 skok = True 
            #levá
             if hrac_rect.left < prekazaka.right and hrac_rect.right > prekazaka.right:
@@ -108,7 +112,10 @@ while True:
                 wall_grab = True
                 skok = True
                 hrac_x = prekazaka.right
-                
+            if tlacitka[pygame.K_LCTRL] and smer == 1:  
+                wall_grab = True
+                skok = True
+                hrac_x = prekazaka.left - velikost_hrace_x
     #s rohy obrazu
     if hrac_y > Rozliseni_okna_y:
         hrac_y = spawn_y
