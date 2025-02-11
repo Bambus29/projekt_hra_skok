@@ -38,20 +38,52 @@ max_rychlost_dashe = 30
 zpomaleni_dashe = 1
 
 #u směru 1=doprava 0=doleva
+
 #level check
-level_1_konec = False
+level = 1
+level_konec = False
+hra_konec = False
 #překážky
-prekazky_lvl_1 = [
-    pygame.Rect(0, 450, 350, 300),            
-    pygame.Rect(900, 300, 600, 650),     
-]
-cil_obdelnik_lvl_1 = pygame.Rect(1150, 200, 10, 100)
-cil_trojuhelnik_lvl_1 = pygame.Rect(1161, 200, 50, 50)
+prekazky ={
+    1: [ 
+        pygame.Rect(0, 450, 350, 300),            
+        pygame.Rect(900, 300, 600, 650)
+    ,],
+    
+   2: [  
+        pygame.Rect(0, 350, 200, 400),
+        pygame.Rect(600, 200, 150, 550),
+        pygame.Rect(1000, 400, 300, 350),
+    ]
+    }
+        
+cile ={
+   1: { 
+        'obdelnik' : pygame.Rect(1150, 200, 10, 100),
+        'trojuhelnik' : pygame.Rect(1161, 200, 50, 50)
+    },
+
+    2: {
+        'obdelnik': pygame.Rect(1250, 300, 10, 100),
+        'trojuhelnik': pygame.Rect(1261, 300, 50, 50)
+    }
+    }
 
 #herní loop
 fps_casovac = pygame.time.Clock()
 
 hodiny = pygame.time.Clock()
+#Vykreslení levelu
+def vykresli_level(level):
+    for prekazaka in prekazky[level]:
+        pygame.draw.rect(okno_aplikace, (40, 133, 16), prekazaka)
+    
+    pygame.draw.rect(okno_aplikace, (0, 0, 0), cile[level]['obdelnik'])
+    cil_troj = cile[level]['trojuhelnik']
+    pygame.draw.polygon(okno_aplikace, (255, 175, 60),
+        [(cil_troj.x, cil_troj.y),
+         (cil_troj.x, cil_troj.y + 50),
+         (cil_troj.x + 50, cil_troj.y + 25)])
 
 while True:
     
@@ -66,23 +98,15 @@ while True:
     na_zemi = False
     gravitace = 0.8
     wall_grab = False
-    #   LEVEL 1 
-    #překážky
-    pygame.draw.rect(okno_aplikace, (40, 133, 16),(0, 450, 350, 300))
-    pygame.draw.rect(okno_aplikace, (40, 133, 16),(900, 300, 600, 650))
+    #LEVEL
     
-    #cíl
-    pygame.draw.rect(okno_aplikace, (0, 0, 0,),(1150, 200, 10, 100))
-    pygame.draw.polygon(okno_aplikace, (255, 175, 60),[(1161, 200),(1161, 250),(1211, 225)])
-
-
-    #hráč
+    vykresli_level(level)
+    
     pygame.draw.rect(okno_aplikace, barva_hrace, (hrac_x, hrac_y, velikost_hrace_x, velikost_hrace_y))
-
     #kolize
    
     #s překážkami
-    for prekazaka in prekazky_lvl_1:
+    for prekazaka in prekazky[level]:
      if hrac_rect.colliderect(prekazaka): 
         prekryv_x = min(hrac_rect.right, prekazaka.right) - max(hrac_rect.left, prekazaka.left)
         if hrac_rect.bottom > prekazaka.top and rychlost_nahoru > 0 and prekryv_x > velikost_hrace_x/2 and not dashuje:
@@ -129,19 +153,22 @@ while True:
     if hrac_y < 0:
         hrac_y = 0
     #s cílem
-    if hrac_rect.colliderect(cil_obdelnik_lvl_1) or hrac_rect.colliderect(cil_trojuhelnik_lvl_1):
-        level_1_konec = True
-    #ukončení levelu
-    if level_1_konec:
-        font = pygame.font.Font(None, 74)
-        text = font.render("Level dokončen", True, (0, 0, 0))
-        text_rect = text.get_rect(center=(Rozliseni_okna_x/2, Rozliseni_okna_y/2))
-        
-        text_pokusy = font.render(f"Počet pokusů: {pokusy}", True, (0, 0, 0))
-        text_pokusy_rect = text_pokusy.get_rect(center=(Rozliseni_okna_x/2, Rozliseni_okna_y/2 + 50))
-        
-        okno_aplikace.blit(text, text_rect)
-        okno_aplikace.blit(text_pokusy,text_pokusy_rect)
+    if (hrac_rect.colliderect(cile[level]['obdelnik']) or 
+        hrac_rect.colliderect(cile[level]['trojuhelnik'])):
+        level_completed = True
+        dash = True
+        if level < len(prekazky):
+            level += 1
+            hrac_x = spawn_x
+            hrac_y = spawn_y
+            level_completed = False
+        else: 
+            font = pygame.font.Font(None, 74)
+            text = font.render("Hra dokončena!", True, (0, 0, 0))
+            text_rect = text.get_rect(center=(Rozliseni_okna_x/2, Rozliseni_okna_y/2))
+            okno_aplikace.blit(text, text_rect)
+   
+    
     #ovládání
     tlacitka = pygame.key.get_pressed()
 
