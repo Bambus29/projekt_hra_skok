@@ -12,10 +12,6 @@ okno_aplikace = pygame.display.set_mode((Rozliseni_okna_x, Rozliseni_okna_y))
 
 #hráč
 
-spawn_x = 100
-spawn_y = 400
-hrac_x = spawn_x
-hrac_y = spawn_y
 velikost_hrace_x = 50
 velikost_hrace_y = 50
 barva_hrace = (220, 50, 23,)
@@ -34,7 +30,7 @@ dash = True
 dashuje = False
 rychlost_dashe = 0
 smer = 1
-max_rychlost_dashe = 30
+max_rychlost_dashe = 20
 zpomaleni_dashe = 1
 
 #u směru 1=doprava 0=doleva
@@ -43,7 +39,7 @@ zpomaleni_dashe = 1
 level = 1
 level_konec = False
 hra_konec = False
-#překážky
+#překážky, cíle, spawny
 prekazky ={
     1: [ 
         pygame.Rect(0, 450, 350, 300),            
@@ -51,9 +47,11 @@ prekazky ={
     ,],
     
    2: [  
-        pygame.Rect(0, 350, 200, 400),
-        pygame.Rect(600, 200, 150, 550),
-        pygame.Rect(1000, 400, 300, 350),
+        pygame.Rect(0, 300, 300, 450),
+        pygame.Rect(500, 0, 200, 350),
+        pygame.Rect(500, 500, 200, 350),
+        pygame.Rect(1100, 300, 100, 450),
+        pygame.Rect(1300, 700, 200, 50),
     ]
     }
         
@@ -64,10 +62,19 @@ cile ={
     },
 
     2: {
-        'obdelnik': pygame.Rect(1250, 300, 10, 100),
-        'trojuhelnik': pygame.Rect(1261, 300, 50, 50)
+        'obdelnik': pygame.Rect(1390, 600, 10, 100),
+        'trojuhelnik': pygame.Rect(1401, 600, 50, 50)
     }
     }
+spawn_pointy = {
+    1: {"x": 100, "y": 400},  
+    2: {"x": 50, "y": 200},   
+}
+
+spawn_x = spawn_pointy[1]["x"]  # Výchozí spawn point pro začátek hry
+spawn_y = spawn_pointy[1]["y"]
+hrac_x = spawn_x
+hrac_y = spawn_y
 
 #herní loop
 fps_casovac = pygame.time.Clock()
@@ -121,37 +128,44 @@ while True:
            #pravá
             if hrac_rect.right > prekazaka.left and hrac_rect.left < prekazaka.left:
              hrac_x = prekazaka.left - velikost_hrace_x 
+            
             if tlacitka[pygame.K_LCTRL] and smer == 1: 
                 wall_grab = True
                 hrac_x = prekazaka.left - velikost_hrace_x
                 skok = True
+                
             if tlacitka[pygame.K_LCTRL] and smer == 0: 
                 wall_grab = True
                 hrac_x = prekazaka.right 
                 skok = True 
+                
            #levá
             if hrac_rect.left < prekazaka.right and hrac_rect.right > prekazaka.right:
              hrac_x = prekazaka.right
+            
             if tlacitka[pygame.K_LCTRL] and smer == 0:  
                 wall_grab = True
                 skok = True
                 hrac_x = prekazaka.right
+               
             if tlacitka[pygame.K_LCTRL] and smer == 1:  
                 wall_grab = True
                 skok = True
                 hrac_x = prekazaka.left - velikost_hrace_x
+            #wall bug fix
+            if hrac_y < prekazaka.y and wall_grab == True:
+                hrac_y = prekazaka.y
     #s rohy obrazu
     if hrac_y > Rozliseni_okna_y:
-        hrac_y = spawn_y
-        hrac_x = spawn_x
+        hrac_x = spawn_pointy[level]["x"]
+        hrac_y = spawn_pointy[level]["y"]
         pokusy += 1
         dash = True
     if hrac_x < 0:
         hrac_x = 0
     if hrac_x + velikost_hrace_x > Rozliseni_okna_x:
         hrac_x = Rozliseni_okna_x - velikost_hrace_x
-    if hrac_y < 0:
-        hrac_y = 0
+    
     #s cílem
     if (hrac_rect.colliderect(cile[level]['obdelnik']) or 
         hrac_rect.colliderect(cile[level]['trojuhelnik'])):
@@ -159,8 +173,8 @@ while True:
         dash = True
         if level < len(prekazky):
             level += 1
-            hrac_x = spawn_x
-            hrac_y = spawn_y
+            hrac_x = spawn_pointy[level]["x"] 
+            hrac_y = spawn_pointy[level]["y"]
             level_completed = False
         else: 
             font = pygame.font.Font(None, 74)
@@ -173,11 +187,11 @@ while True:
     tlacitka = pygame.key.get_pressed()
 
     if tlacitka[pygame.K_d]:
-        hrac_x += 5
+        hrac_x += 7
         smer = 1
 
     if tlacitka[pygame.K_a]:
-        hrac_x -= 5
+        hrac_x -= 7
         smer = 0
 
     if tlacitka[pygame.K_SPACE] and skok:
