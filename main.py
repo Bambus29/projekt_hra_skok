@@ -52,7 +52,14 @@ prekazky ={
         pygame.Rect(500, 500, 200, 350),
         pygame.Rect(1100, 300, 100, 450),
         pygame.Rect(1300, 700, 200, 50),
-    ]
+    ],
+    3:[
+        pygame.Rect(0, 700, 200, 50),
+        pygame.Rect(300, 300, 150, 450),
+        pygame.Rect(700, 400, 200, 200),
+        pygame.Rect(1345, 300, 75, 75)
+        
+    ] 
     }
         
 cile ={
@@ -62,13 +69,19 @@ cile ={
     },
 
     2: {
-        'obdelnik': pygame.Rect(1390, 600, 10, 100),
-        'trojuhelnik': pygame.Rect(1401, 600, 50, 50)
+        'obdelnik': pygame.Rect(1395, 600, 10, 100),
+        'trojuhelnik': pygame.Rect(1406, 600, 50, 50)
+    },
+
+    3:{
+        'obdelnik': pygame.Rect(1370, 200, 10, 100),
+        'trojuhelnik': pygame.Rect(1381, 200, 50, 50)
     }
     }
 spawn_pointy = {
     1: {"x": 100, "y": 400},  
-    2: {"x": 50, "y": 200},   
+    2: {"x": 50, "y": 200},
+    3: {"x": 100, "y": 650}   
 }
 
 spawn_x = spawn_pointy[1]["x"]  # Výchozí spawn point pro začátek hry
