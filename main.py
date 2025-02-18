@@ -59,6 +59,17 @@ prekazky ={
         pygame.Rect(700, 400, 200, 200),
         pygame.Rect(1345, 300, 75, 75)
         
+    ],
+    4: [
+        pygame.Rect(50, 300, 75, 75),
+        pygame.Rect(450, 700, 200, 50),
+        pygame.Rect(750, 700, 200, 50),
+        pygame.Rect(500, 300, 100, 50),
+        pygame.Rect(1000, 500, 200, 50),
+        pygame.Rect(1000, 300, 200, 50),
+        pygame.Rect(150, 700, 200, 50),
+        pygame.Rect(350, 0, 100, 400)
+
     ] 
     }
         
@@ -76,12 +87,17 @@ cile ={
     3:{
         'obdelnik': pygame.Rect(1370, 200, 10, 100),
         'trojuhelnik': pygame.Rect(1381, 200, 50, 50)
+    },
+    4: {
+        'obdelnik': pygame.Rect(550, 200, 10, 100),
+        'trojuhelnik': pygame.Rect(561, 200, 50, 50)
     }
     }
 spawn_pointy = {
     1: {"x": 100, "y": 400},  
     2: {"x": 50, "y": 200},
-    3: {"x": 100, "y": 650}   
+    3: {"x": 100, "y": 650},
+    4: {"x": 65, "y": 300}  
 }
 
 spawn_x = spawn_pointy[1]["x"]  # Výchozí spawn point pro začátek hry
@@ -174,6 +190,7 @@ while True:
         hrac_y = spawn_pointy[level]["y"]
         pokusy += 1
         dash = True
+        
     if hrac_x < 0:
         hrac_x = 0
     if hrac_x + velikost_hrace_x > Rozliseni_okna_x:
