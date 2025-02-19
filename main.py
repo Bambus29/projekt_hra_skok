@@ -129,6 +129,13 @@ while True:
         if udalost.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+        if udalost.type == pygame.KEYDOWN:
+            if udalost.key == pygame.K_ESCAPE:
+                level = 1
+                pokusy = 1
+                hrac_x = spawn_pointy[1]["x"]
+                hrac_y = spawn_pointy[1]["y"]
+                dash = True
    
     hrac_rect = pygame.Rect(hrac_x, hrac_y, velikost_hrace_x, velikost_hrace_y)
     na_zemi = False
