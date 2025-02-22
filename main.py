@@ -64,7 +64,7 @@ prekazky ={
         pygame.Rect(50, 300, 75, 75),
         pygame.Rect(450, 700, 200, 50),
         pygame.Rect(750, 700, 200, 50),
-        pygame.Rect(500, 300, 100, 50),
+        pygame.Rect(500, 300, 150, 50),
         pygame.Rect(1000, 500, 200, 50),
         pygame.Rect(1000, 300, 200, 50),
         pygame.Rect(150, 700, 200, 50),
@@ -89,8 +89,8 @@ cile ={
         'trojuhelnik': pygame.Rect(1381, 200, 50, 50)
     },
     4: {
-        'obdelnik': pygame.Rect(550, 200, 10, 100),
-        'trojuhelnik': pygame.Rect(561, 200, 50, 50)
+        'obdelnik': pygame.Rect(540, 200, 10, 100),
+        'trojuhelnik': pygame.Rect(551, 200, 50, 50)
     }
     }
 spawn_pointy = {
@@ -214,8 +214,9 @@ while True:
             hrac_y = spawn_pointy[level]["y"]
             level_completed = False
         else: 
+            pygame.draw.rect(okno_aplikace, (0,0,0), (0, 0, Rozliseni_okna_x, Rozliseni_okna_y))
             font = pygame.font.Font(None, 74)
-            text = font.render("Hra dokončena!", True, (0, 0, 0))
+            text = font.render("Hra dokončena!", True, (255,255,255))
             text_rect = text.get_rect(center=(Rozliseni_okna_x/2, Rozliseni_okna_y/2))
             okno_aplikace.blit(text, text_rect)
    
