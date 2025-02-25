@@ -136,7 +136,11 @@ while True:
                 hrac_x = spawn_pointy[1]["x"]
                 hrac_y = spawn_pointy[1]["y"]
                 dash = True
-   
+            if udalost.key == pygame.K_r:
+                hrac_x = spawn_pointy[level]["x"]
+                hrac_y = spawn_pointy[level]["y"]
+                pokusy += 1
+                dash = True
     hrac_rect = pygame.Rect(hrac_x, hrac_y, velikost_hrace_x, velikost_hrace_y)
     na_zemi = False
     gravitace = 0.8
