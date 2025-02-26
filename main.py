@@ -218,12 +218,55 @@ while True:
             hrac_y = spawn_pointy[level]["y"]
             level_completed = False
         else: 
-            pygame.draw.rect(okno_aplikace, (0,0,0), (0, 0, Rozliseni_okna_x, Rozliseni_okna_y))
+            hra_konec = True
+            
+            pokusy_celk = pokusy
+            
+            if pokusy_celk <= 1:
+                hvezdicky = 5
+            elif pokusy_celk <= 10:
+                hvezdicky = 4
+            elif pokusy_celk <= 25:
+                hvezdicky = 3
+            elif pokusy_celk <= 50:
+                hvezdicky = 2
+            else:
+                hvezdicky = 1
+            
+            pygame.draw.rect(okno_aplikace, (0, 0, 0,), (0,0, Rozliseni_okna_x, Rozliseni_okna_y) )
             font = pygame.font.Font(None, 74)
-            text = font.render("Hra dokončena!", True, (255,255,255))
-            text_rect = text.get_rect(center=(Rozliseni_okna_x/2, Rozliseni_okna_y/2))
+            text = font.render("Hra dokončena!", True, (255, 255, 255))
+            text_rect = text.get_rect(center=(Rozliseni_okna_x/2, Rozliseni_okna_y/2 - 50))
             okno_aplikace.blit(text, text_rect)
-   
+        
+            font_pokusy = pygame.font.Font(None, 48)
+            text_pokusy = font_pokusy.render(f"Počet pokusů: {pokusy_celk}", True, (255, 255, 255))
+            text_pokusy_rect = text_pokusy.get_rect(center=(Rozliseni_okna_x/2, Rozliseni_okna_y/2 + 20))
+            okno_aplikace.blit(text_pokusy, text_pokusy_rect)
+            
+            hvezdicka_rozmer = 80  
+            mezera = 20
+            celkova_sirka = hvezdicky * hvezdicka_rozmer + (hvezdicky - 1) * mezera
+            start_x = (Rozliseni_okna_x - celkova_sirka) / 2
+            
+            for i in range(hvezdicky):
+                x_pozice = start_x + i * (hvezdicka_rozmer + mezera)
+                stred_x = x_pozice + hvezdicka_rozmer/2
+                stred_y = Rozliseni_okna_y/2 + 100
+                
+                body_hvezdicky = []
+                for j in range(5):
+                    vnejsi_uhel = math.pi/2 + j * 2*math.pi/5
+                    vnejsi_x = stred_x + hvezdicka_rozmer/2 * math.cos(vnejsi_uhel)
+                    vnejsi_y = stred_y - hvezdicka_rozmer/2 * math.sin(vnejsi_uhel)
+                    body_hvezdicky.append((vnejsi_x, vnejsi_y))
+                    
+                    vnitrni_uhel = vnejsi_uhel + math.pi/5
+                    vnitrni_x = stred_x + hvezdicka_rozmer/5 * math.cos(vnitrni_uhel)
+                    vnitrni_y = stred_y - hvezdicka_rozmer/5 * math.sin(vnitrni_uhel)
+                    body_hvezdicky.append((vnitrni_x, vnitrni_y))
+                
+                pygame.draw.polygon(okno_aplikace, (255, 215, 0), body_hvezdicky)
     
     #ovládání
     tlacitka = pygame.key.get_pressed()
