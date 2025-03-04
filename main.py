@@ -271,11 +271,11 @@ while True:
     #ovládání
     tlacitka = pygame.key.get_pressed()
 
-    if tlacitka[pygame.K_d]:
+    if tlacitka[pygame.K_d] or tlacitka[pygame.K_RIGHT]:
         hrac_x += 7
         smer = 1
 
-    if tlacitka[pygame.K_a]:
+    if tlacitka[pygame.K_a] or tlacitka[pygame.K_LEFT]:
         hrac_x -= 7
         smer = 0
 
