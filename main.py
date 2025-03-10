@@ -55,7 +55,7 @@ prekazky ={
     ],
     3:[
         pygame.Rect(0, 700, 200, 50),
-        pygame.Rect(300, 300, 150, 450),
+        pygame.Rect(300, 500, 150, 100),
         pygame.Rect(700, 400, 200, 200),
         pygame.Rect(1345, 300, 75, 75)
         
