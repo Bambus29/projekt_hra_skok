@@ -10,6 +10,7 @@ Rozliseni_okna_x = 1500
 Rozliseni_okna_y = 750
 okno_aplikace = pygame.display.set_mode((Rozliseni_okna_x, Rozliseni_okna_y))
 
+
 #hráč
 
 velikost_hrace_x = 50
@@ -24,6 +25,16 @@ pokusy_celk = 0
 na_zemi = False
 wall_grab = False
 wall_grab_grab_padani = 0.5
+
+#Textury
+
+hrac_doprava = pygame.image.load("hrac_doprava.png")
+hrac_doleva = pygame.image.load("hrac_doleva.png")
+
+hrac_doprava = pygame.transform.scale(hrac_doprava, (velikost_hrace_x, velikost_hrace_y))
+hrac_doleva = pygame.transform.scale(hrac_doleva, (velikost_hrace_x, velikost_hrace_y))
+
+aktualni_hrac = hrac_doprava
 
 #dash
 dash = True
@@ -141,7 +152,17 @@ while True:
                 hrac_y = spawn_pointy[level]["y"]
                 pokusy += 1
                 dash = True
+    
+    # Textura hráče změna
     hrac_rect = pygame.Rect(hrac_x, hrac_y, velikost_hrace_x, velikost_hrace_y)
+
+    if smer == 1:
+        aktualni_hrac = hrac_doprava
+    else:
+        aktualni_hrac = hrac_doleva
+    okno_aplikace.blit(aktualni_hrac, (hrac_x, hrac_y))
+    
+    
     na_zemi = False
     gravitace = 0.8
     wall_grab = False
@@ -149,7 +170,6 @@ while True:
     
     vykresli_level(level)
     
-    pygame.draw.rect(okno_aplikace, barva_hrace, (hrac_x, hrac_y, velikost_hrace_x, velikost_hrace_y))
     #kolize
    
     #s překážkami
