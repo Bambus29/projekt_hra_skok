@@ -36,6 +36,8 @@ hrac_doleva = pygame.transform.scale(hrac_doleva, (velikost_hrace_x, velikost_hr
 
 aktualni_hrac = hrac_doprava
 
+mrak = pygame.image.load("mrak.png")
+
 #dash
 dash = True
 dashuje = False
@@ -123,7 +125,8 @@ hodiny = pygame.time.Clock()
 #Vykreslení levelu
 def vykresli_level(level):
     for prekazaka in prekazky[level]:
-        pygame.draw.rect(okno_aplikace, (40, 133, 16), prekazaka)
+        mrak_scaled = pygame.transform.scale(mrak, (prekazaka.width, prekazaka.height))
+        okno_aplikace.blit(mrak_scaled, (prekazaka.x, prekazaka.y))
     
     pygame.draw.rect(okno_aplikace, (0, 0, 0), cile[level]['obdelnik'])
     cil_troj = cile[level]['trojuhelnik']
